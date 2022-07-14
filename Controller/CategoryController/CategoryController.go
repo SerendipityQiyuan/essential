@@ -12,6 +12,7 @@ import (
 
 type ICategoryController interface {
 	RestController
+	SelectCategoryList(ctx *gin.Context)
 }
 
 type CategoryController struct {
@@ -97,5 +98,13 @@ func (c CategoryController) Delete(ctx *gin.Context) {
 		return
 	}
 	response.Success(ctx, nil, "删除成功")
+}
 
+func (c CategoryController) SelectCategoryList(ctx *gin.Context) {
+	category, err := c.Repository.SelectList()
+	if err != nil {
+		response.Fail(ctx, nil, "分类列表查询失败")
+		return
+	}
+	response.Success(ctx, gin.H{"data": category}, "分类列表查询成功")
 }

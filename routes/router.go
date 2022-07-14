@@ -23,17 +23,18 @@ func CollectRoute(r *gin.Engine) {
 	categoryRoutes.PUT("/:id", categoryController.Update)
 	categoryRoutes.GET("/:id", categoryController.Show)
 	categoryRoutes.DELETE("/:id", categoryController.Delete)
+	categoryRoutes.GET("/categoryList", categoryController.SelectCategoryList)
 
 	//文章上传路由
 	postRoutes := r.Group("api/posts")
 	postController := PostController.NewPostController()
-	postRoutes.POST("/page/allList", postController.AllPageList)
+	postRoutes.GET("/page/allList", postController.AllPageList)
 	postRoutes.Use(middleware.AuthMiddleware())
 	postRoutes.POST("", postController.Create)
 	postRoutes.PUT("", postController.Update)
 	postRoutes.GET("", postController.Show)
 	postRoutes.DELETE("", postController.Delete)
-	postRoutes.POST("/page/list", postController.PageList)
+	postRoutes.GET("/page/list", postController.PageList)
 	postRoutes.POST("/addLike", postController.AddLike)
 
 	//文件上传路由

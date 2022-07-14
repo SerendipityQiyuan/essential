@@ -3,6 +3,7 @@ package repository
 import (
 	"awesomeProject1/common"
 	"awesomeProject1/model"
+	"fmt"
 	"gorm.io/gorm"
 )
 
@@ -45,4 +46,14 @@ func (c CategoryRepository) DeleteById(id int) error {
 	}
 	c.DB.Delete(&category, id)
 	return nil
+}
+
+func (c CategoryRepository) SelectList() ([]model.Category, error) {
+	var category []model.Category
+	err := c.DB.Raw("select * from categories").Find(&category).Error
+	fmt.Println("category:", category)
+	if err != nil {
+		return nil, err
+	}
+	return category, nil
 }

@@ -151,23 +151,18 @@ func (p PostController) PageList(ctx *gin.Context) {
 	var posts []model.Post
 	user, _ := ctx.Get("user")
 	var total int64
-	//p.DB.Where("user_id = ?", user.(model.User).ID).
-	//	Preload("User").
-	//	Order("created_at desc").
-	//	//Offset((pageNum - 1) * pageSize).
-	//	//Limit(pageSize).
-	//	Find(&posts).
-	//	Count(&total)
-	//select p.id,u.name from posts p,users u where p.user_id=1 and p.user_id = u.id;
-	p.DB.Raw("select p.*,u.name Author from posts p,users u where p.user_id = ? and p.user_id = u.id order by p.created_at desc", user.(model.User).ID).
+
+	p.DB.
 		Where("user_id = ?", user.(model.User).ID).
+		Preload("Category").
 		Offset((pageNum - 1) * pageSize).
 		Limit(pageSize).
-		Find(&posts).
-		Count(&total)
-	println(posts)
+		Order("created_at desc").
+		Find(&posts)
+
+	p.DB.Model(&posts).Where("user_id = ?", user.(model.User).ID).Count(&total)
 	//查询记录总条数
-	response.Success(ctx, gin.H{"data": posts, "total": total}, "成功")
+	response.Success(ctx, gin.H{"data": &posts, "total": total}, "成功")
 }
 
 // AllPageList 查询全部文章记录
@@ -175,19 +170,18 @@ func (p PostController) AllPageList(ctx *gin.Context) {
 	//获取分页参数
 	pageNum, _ := strconv.Atoi(ctx.DefaultQuery("pageNum", "1"))
 	pageSize, _ := strconv.Atoi(ctx.DefaultQuery("pageSize", "20"))
+	fmt.Println(pageNum, pageSize)
 
 	//分页
 	var posts []model.Post
 	var total int64
-
-	//p.DB.Preload("User").Order("created_at desc").Offset((pageNum - 1) * pageSize).Limit(pageSize).Find(&posts).Count(&total)
-	p.DB.Raw("select p.*,u.name Author from posts p left join users u on p.user_id = u.id order by p.created_at desc").
-		Find(&posts).
-		Offset((pageNum - 1) * pageSize).Limit(pageSize).
-		Count(&total)
+	p.DB.
+		Order("created_at desc").
+		Preload("Category").Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&posts)
+	p.DB.Model(&posts).Count(&total)
 	println(posts)
 	//查询记录总条数
-	response.Success(ctx, gin.H{"data": posts, "total": total}, "成功")
+	response.Success(ctx, gin.H{"data": &posts, "total": total}, "成功")
 }
 
 func (p PostController) AddLike(ctx *gin.Context) {

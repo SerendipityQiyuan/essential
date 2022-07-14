@@ -10,14 +10,14 @@ type Post struct {
 	UserId     uint      `json:"user_id" gorm:"not null"`
 	CategoryId uint      `json:"category_id" gorm:"not null"`
 	Author     string    `json:"author"`
-	Category   *Category
-	Title      string `json:"title" gorm:"type:varchar(50);not null"`
-	HeadImg    string `json:"head_img" gorm:"type:varchar(255)"`
-	Content    string `json:"content" gorm:"type:text"`
-	Like       uint   `json:"like" gorm:"default:0"`
-	LikeUsers  string `json:"like_user" gorm:"type:varchar(255)"`
-	CreatedAt  Time   `json:"created_at" gorm:"autoCreateTime;type:timestamp"`
-	UpdatedAt  Time   `json:"updated_at" gorm:"autoUpdateTime;type:timestamp"`
+	Category   *Category `json:"category"`
+	Title      string    `json:"title" gorm:"type:varchar(50);not null"`
+	HeadImg    string    `json:"head_img" gorm:"type:varchar(255)"`
+	Content    string    `json:"content" gorm:"type:text"`
+	Like       uint      `json:"like" gorm:"default:0"`
+	LikeUsers  string    `json:"like_user" gorm:"type:varchar(255)"`
+	CreatedAt  Time      `json:"created_at" gorm:"autoCreateTime;type:timestamp"`
+	UpdatedAt  Time      `json:"updated_at" gorm:"autoUpdateTime;type:timestamp"`
 }
 
 func (base *Post) BeforeCreate(scope *gorm.DB) (err error) {
