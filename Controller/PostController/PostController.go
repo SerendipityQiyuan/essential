@@ -51,6 +51,7 @@ func (p PostController) Create(ctx *gin.Context) {
 	//创建文章
 	post := model.Post{
 		UserId:     user.(model.User).ID,
+		Author:     user.(model.User).Name,
 		CategoryId: requestPost.CategoryId,
 		Title:      requestPost.Title,
 		HeadImg:    requestPost.HeadImg,

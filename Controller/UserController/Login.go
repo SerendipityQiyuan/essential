@@ -11,7 +11,7 @@ import (
 )
 
 func Login(ctx *gin.Context) {
-	DB := common.InitDB()
+	DB := common.GetDB()
 	//获取数据
 	var requestUser = model.User{}
 	err := ctx.Bind(&requestUser)

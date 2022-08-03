@@ -3,6 +3,7 @@ package dto
 import "awesomeProject1/model"
 
 type UserDto struct {
+	Id            uint   `json:"id"`
 	Name          string `json:"name"`
 	Telephone     string `json:"telephone"`
 	Sex           string `json:"sex" gorm:"type:char(2)"`
@@ -13,6 +14,7 @@ type UserDto struct {
 
 func ToUserDto(user model.User) UserDto {
 	return UserDto{
+		Id:            user.ID,
 		Name:          user.Name,
 		Telephone:     user.Telephone,
 		Sex:           user.Sex,

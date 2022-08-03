@@ -14,15 +14,18 @@ func CollectRoute(r *gin.Engine) {
 	r.Use(middleware.CORSMiddleware(), middleware.RecoveryMiddleware())
 	r.POST("/api/register", UserController.Register)
 	r.POST("/api/login", UserController.Login)
-	r.GET("/api/info", middleware.AuthMiddleware(), UserController.Info)
+	r.GET("/api/info", middleware.AuthMiddleware(), UserController.DefaultInfo)
+	r.GET("/api/orderUserInfo", UserController.OrderUserInfo)
 
+	Test := r.Group("test")
+	Test.GET("/test/:name")
 	//创建路由分组
 	categoryRoutes := r.Group("api/categories")
 	categoryController := CategoryController.NewCategoryController()
 	categoryRoutes.POST("", categoryController.Create)
-	categoryRoutes.PUT("/:id", categoryController.Update)
-	categoryRoutes.GET("/:id", categoryController.Show)
-	categoryRoutes.DELETE("/:id", categoryController.Delete)
+	categoryRoutes.PUT(":id", categoryController.Update)
+	categoryRoutes.GET(":id", categoryController.Show)
+	categoryRoutes.DELETE(":id", categoryController.Delete)
 	categoryRoutes.GET("/categoryList", categoryController.SelectCategoryList)
 
 	//文章上传路由
